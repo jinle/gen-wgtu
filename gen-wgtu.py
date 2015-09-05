@@ -77,8 +77,8 @@ def main(oldWgt, newWgt, outWgtu = None):
 
     addNameList, delNameList, modNameList = compareWgt(oldZf, newZf) 
     if (len(addNameList) == 0 and len(delNameList) == 0 and len(modNameList) == 0):
-        print >> sys.stderr, "two resources are identical, do not need generate update package"
-        sys.exit(1)
+        print >> sys.stderr, "two wgt files are identical, do not need generate wgtu package."
+        return False
 
     if (outWgtu is None):
         outWgtu = "update-diff-" + oldInfo["version"] + "-" + newInfo["version"] + ".wgtu"
