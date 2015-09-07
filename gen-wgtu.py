@@ -5,6 +5,7 @@ import sys
 import zipfile
 import hashlib
 import json
+import re
 from xml.dom.minidom import Document
 
 def md5sum(str):
@@ -39,6 +40,36 @@ def compareWgt(oldZf, newZf):
     #print "addNameList:", addNameList
     delNameList = list(oldNameSet - newNameSet)
     #print "delNameList:", delNameList
+
+    regexp = re.compile(r'(.*/).*')
+    delDirList = [regexp.sub("\g<1>", x) for x in delNameList if x.find("/") >= 0]
+    #remove duplate item
+    delDirList = list(set(delDirList))
+    #print "delDirList:", delDirList
+
+    def isRealDel(dir):
+        for x in newZf.namelist():
+           if x.startswith(dir):
+                return False
+        return True
+
+    realDelDirList = [x for x in delDirList if isRealDel(x)]
+    #print "realDelDirList:", realDelDirList
+
+    def isSubDelItem(name):
+        for x in realDelDirList:
+            if name.startswith(x):
+                return True
+        return False
+
+    delNameList = [x for x in delNameList if not isSubDelItem(x)]
+    #print "delNameList:", delNameList
+
+    delNameDirList = delNameList + realDelDirList
+    #print "delNameDirList:", delNameDirList
+
+
+
     commNameList = list(newNameSet & oldNameSet)
     #print "commNameList:", commNameList
 
@@ -49,7 +80,7 @@ def compareWgt(oldZf, newZf):
     modNameList = [x for x, y in modNameMd5TupSet]
     #print "modNameList:", modNameList
 
-    return addNameList, delNameList, modNameList
+    return addNameList, delNameDirList, modNameList
 
 
 def main(oldWgt, newWgt, outWgtu = None):
@@ -75,8 +106,8 @@ def main(oldWgt, newWgt, outWgtu = None):
         print >> sys.stderr, "new app version must greater than old app"
         return False
 
-    addNameList, delNameList, modNameList = compareWgt(oldZf, newZf) 
-    if (len(addNameList) == 0 and len(delNameList) == 0 and len(modNameList) == 0):
+    addNameList, delNameDirList, modNameList = compareWgt(oldZf, newZf)
+    if (len(addNameList) == 0 and len(delNameDirList) == 0 and len(modNameList) == 0):
         print >> sys.stderr, "two wgt files are identical, do not need generate wgtu package."
         return False
 
@@ -91,7 +122,7 @@ def main(oldWgt, newWgt, outWgtu = None):
         for name in addNameList:
             outZf.writestr("www/" + name, newZf.read(name))
 
-        xml = generateXml(newInfo["id"], oldInfo["version"], delNameList)
+        xml = generateXml(newInfo["id"], oldInfo["version"], delNameDirList)
         outZf.writestr("update.xml", xml)
         outZf.close()
 
