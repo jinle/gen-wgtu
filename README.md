@@ -1,6 +1,6 @@
 ## gen-wgtu
 
-**gen-wgtu**是一个用于生成使用HBuilder开发的移动App差量资源升级包的命令行工具。该工具通过对比两个完整的升级资源包，生成符合要求的.wgtu差量包。
+**gen-wgtu**是一个用于生成HTML5+移动App差量资源升级包的命令行工具。该工具通过对比两个完整的升级资源包，生成符合要求的.wgtu差量包。HTML5+开发移动App详细介绍请看[这里](http://ask.dcloud.net.cn/docs/#http://ask.dcloud.net.cn/article/89)。
 
 ## 命令格式
 ```
@@ -18,4 +18,4 @@ python genwgtu.py app-1.0.0.wgt  app-1.1.0.wgt -o update.wgtu
 
 ## 相关资源
 *  [资源包生成(wgt)](http://ask.dcloud.net.cn/docs/#http://ask.dcloud.net.cn/article/182)
-* [资源差量升级(wgtu)及差量升级包文件格式说明](http://ask.dcloud.net.cn/docs/#http://ask.dcloud.net.cn/article/199) 
+* [资源差量升级包(wgtu)及包文件格式说明](http://ask.dcloud.net.cn/docs/#http://ask.dcloud.net.cn/article/199) 
