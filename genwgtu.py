@@ -139,7 +139,7 @@ def main(oldWgt, newWgt, outWgtu = None):
 if __name__ == "__main__":
     myargv = sys.argv[1:]
     if (len(myargv) > 3 or len(myargv) < 2):
-        print >> sys.stderr, "\nUsage:  %s <old.wgt>  <new.wgt>  [out.wgtu]\n"  % sys.argv[0]
+        print >> sys.stderr, "\nUsage: %s <old.wgt>  <new.wgt>  [ -o out.wgtu]\n"  % sys.argv[0]
         exit(1)
     else:
         main(*myargv)
